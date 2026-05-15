@@ -19,16 +19,22 @@ st.write('The name on the smoothie will be:', name_on_order)
 
 my_dataframe = (
     session.table("smoothies.public.fruit_options")
-    .select(col('FRUIT_NAME'))
+    .select(col('FRUIT_NAME'),col('SEARCH_ON')
 )
 
 fruit_rows = my_dataframe.collect()
+'
+fruit_options = {
+    row["FRUIT_NAME"]: row["SEARCH_ON"]
+    for row in fruit_rows
+}
 
 fruit_list = [row["FRUIT_NAME"] for row in fruit_rows]
 
 ingredients_list = st.multiselect(
     "Choose upto 5 ingredients",
-    fruit_list,
+    #fruit_list,
+    list(fruit_options.keys()),
     max_selections=5,
 )
 
@@ -41,6 +47,8 @@ if ingredients_list:
         ingredients_string += fruit_chosen + ' '
 
         st.subheader(fruit_chosen + ' Nutrition Information')
+
+        search_on = fruit_options[fruit_chosen]
 
         smoothiefroot_response = requests.get(
             "https://fruityvice.com/api/fruit/" + fruit_chosen
