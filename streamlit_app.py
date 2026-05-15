@@ -19,11 +19,11 @@ st.write('The name on the smoothie will be:', name_on_order)
 
 my_dataframe = (
     session.table("smoothies.public.fruit_options")
-    .select(col('FRUIT_NAME'),col('SEARCH_ON')
+    .select(col('FRUIT_NAME'),col('SEARCH_ON'))
 )
 
 fruit_rows = my_dataframe.collect()
-'
+
 fruit_options = {
     row["FRUIT_NAME"]: row["SEARCH_ON"]
     for row in fruit_rows
@@ -51,7 +51,7 @@ if ingredients_list:
         search_on = fruit_options[fruit_chosen]
 
         smoothiefroot_response = requests.get(
-            "https://fruityvice.com/api/fruit/" + fruit_chosen
+            "https://fruityvice.com/api/fruit/" + SEARCH_ON
         )
 
         st.dataframe(
